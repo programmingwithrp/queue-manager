@@ -38,15 +38,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
     })
   ],
-    callbacks: {
+  callbacks: {
     async jwt({ token, user, session }) {
-      // @ts-ignore
-      const { _id, username, role, organization } = user;
       if (user) {
-        token.userId  = _id;
-        token.username = username;
-        token.role = role;
-        token.organization  = organization; 
+        // @ts-ignore
+        token.userId = user._id;
+        // @ts-ignore
+        token.username = user.username;
+        // @ts-ignore
+        token.role = user.role;
+        // @ts-ignore
+        token.organization = user.organization;
       }
       return token;
     },
