@@ -22,7 +22,7 @@ import React, { useEffect, useState } from "react";
 
 export default function desks() {
   const { session } = useOrganization();
-  const [desks, setDesks] = useState([]);
+  const [desks, setDesks] = useState<DeskInterface[]>([]);
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
