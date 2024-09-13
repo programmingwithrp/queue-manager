@@ -96,7 +96,7 @@ function reducer(state: typeof initialState, action: any) {
   }
 }
 
-export default function Dashboard() {
+export default function QueueCustomers() {
   const { session } = useOrganization();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -109,30 +109,30 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const getOrgResponse = await fetch(
-        "/api/organizations/?name=" + session?.user?.email,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
-      const data = await getOrgResponse.json();
-      console.log("Organization data :>> ", data);
-      if (getOrgResponse.ok) {
-        console.log("data :>> ", data);
-        dispatch({ type: "SET_ORG_ID", payload: data._id });
-      }
-    };
+    // const checkAuth = async () => {
+    //   const getOrgResponse = await fetch(
+    //     "/api/organizations/?name=" + session?.user?.email,
+    //     {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json"
+    //       }
+    //     }
+    //   );
+    //   const data = await getOrgResponse.json();
+    //   console.log("Organization data :>> ", data);
+    //   if (getOrgResponse.ok) {
+    //     console.log("data :>> ", data);
+    //     dispatch({ type: "SET_ORG_ID", payload: data._id });
+    //   }
+    // };
     async function fetchCustomersData() {
       const fetchAPI = await fetch("/api/customers/?organization=" + session.user.name);
       const data = await fetchAPI.json();
       dispatch({ type: "FETCH_USERS", payload: data });
     }
     dispatch({ type: "SET_LOADING", payload: true });
-    checkAuth();
+    // checkAuth();
     fetchCustomersData();
     dispatch({ type: "SET_LOADING", payload: false });
   }, []);
@@ -202,7 +202,7 @@ export default function Dashboard() {
           </div>
         </div>
         {openAddCustomerPanel ? (
-          <AddCustomerForm dispatch={dispatch} session={session} orgId={orgId} />
+          <AddCustomerForm dispatch={dispatch} queueId ={param} />
         ) : (
           <>
             <DashboardTabsContent

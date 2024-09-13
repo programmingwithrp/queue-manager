@@ -63,9 +63,9 @@ const router = useRouter();
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  name="email"
+                  id="username"
+                  type="username"
+                  name="username"
                   placeholder="m@example.com"
                   required
                 />

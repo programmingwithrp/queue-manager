@@ -36,7 +36,7 @@ export default function SignUpForm() {
     if (response.ok) {
       const organization = await response.json();
       console.log(organization);
-      router.push('/signin');
+      router.push('/orguser');
     } else {
       toast({
         variant: "destructive",
@@ -50,29 +50,29 @@ export default function SignUpForm() {
     <div className="flex items-center justify-center h-screen">
       <Card className="mx-auto max-w-sm mt-4">
         <CardHeader>
-          <CardTitle className="text-xl">Sign Up</CardTitle>
-          <CardDescription>Enter your information to create an account</CardDescription>
+          <CardTitle className="text-xl">Organization SignUp</CardTitle>
+          <CardDescription>Create Organization Account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreateOrg}>
             <div className="grid gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="first-name">Name</Label>
-                  <Input id="first-name" placeholder="Max" required name="name" />
+                  <Label htmlFor="Organization-Name">Organization Name</Label>
+                  <Input id="Organization-Name" placeholder="Max" required name="name" />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="last-name">Org Sector</Label>
+                  <Label htmlFor="Organization-Type">Organization Type</Label>
                   <Input
-                    id="last-name"
+                    id="Organization-Type"
                     placeholder="Robinson"
                     required
-                    name="organization"
+                    name="organizationType"
                   />
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Organization Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -82,21 +82,31 @@ export default function SignUpForm() {
                 />
               </div>
               <div className="grid gap-2">
+                <Label htmlFor="email">Organization Contact Number</Label>
+                <Input
+                  id="contactInfo"
+                  type="number"
+                  placeholder="9999999999"
+                  required
+                  name="contactInfo"
+                />
+              </div>
+              {/* <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" name="password" />
-              </div>
+              </div> */}
               <Button type="submit" className="w-full">
                 Create an account
               </Button>
-              <Button variant="outline" className="w-full">
+              {/* <Button variant="outline" className="w-full">
                 Sign up with GitHub
-              </Button>
+              </Button> */}
             </div>
           </form>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
+            Already have an Org account?{" "}
             <Link href="/signin" className="underline">
-              Sign in
+              Sign in with Organization User
             </Link>
           </div>
         </CardContent>

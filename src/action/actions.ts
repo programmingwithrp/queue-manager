@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export async function handleSignIn(formData: any) {
   try {
     const response = await signIn("credentials", {
-      email: formData.email,
+      username: formData.username,
       password: formData.password,
       redirect: false
     });
