@@ -20,7 +20,7 @@ import { Pencil2Icon } from "@radix-ui/react-icons";
 import { Tabs, TabsContent } from "@radix-ui/react-tabs";
 import React, { useEffect, useState } from "react";
 
-export default function desks() {
+export default function DesksSetting() {
   const { session } = useOrganization();
   const [desks, setDesks] = useState<DeskInterface[]>([]);
   const { toast } = useToast();

@@ -19,7 +19,7 @@ import { CustomTable } from "@/components/custom/dashboard/table/CustomTable";
 import DesksTabsRowContent from "@/components/custom/dashboard/table/DesksTabsRowContent";
 import { TableHead } from "@/components/ui/table";
 
-const desks = () => {
+const Desks = () => {
   const [desks, setDesks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -82,14 +82,4 @@ const desks = () => {
   );
 };
 
-export default desks;
-
-{
-  /* <div>
-{desks.map((desk: DeskInterface) => (
-  <div key={desk._id}>
-    <h1>{desk.deskDescription}</h1>
-  </div>
-))}
-</div> */
-}
+export default Desks;

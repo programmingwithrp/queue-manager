@@ -63,7 +63,7 @@ export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: 
       fetchData();
     };
     handleFetchDesks();
-  }, []);
+  }, [orgranizationId]);
 
   const updateRequiredDetails = (queueId: string, deskNumber: number) => {
     setQueue(queueId);

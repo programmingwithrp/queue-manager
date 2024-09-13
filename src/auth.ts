@@ -41,9 +41,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
     async jwt({ token, user, session }) {
       if (user) {
-        // ignore error
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         token.userId  = user._id;
         token.username = user.username;
         token.role = user.role;
