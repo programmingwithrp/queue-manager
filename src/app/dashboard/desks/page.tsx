@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import CustomersTabsRowContent from "@/components/custom/dashboard/table/CustomersTabsRowContent";
 import LoadingWheel from "@/components/ui/loader";
-import Usermodel from "@/interfaces/Usermodel";
 import { CustomTable } from "@/components/custom/dashboard/table/CustomTable";
 import DesksTabsRowContent from "@/components/custom/dashboard/table/DesksTabsRowContent";
 import { TableHead } from "@/components/ui/table";

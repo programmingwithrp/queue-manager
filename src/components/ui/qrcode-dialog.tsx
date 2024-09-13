@@ -98,4 +98,7 @@ const DialogCloseButton = React.memo(
   }
 );
 
+// Add display name here
+DialogCloseButton.displayName = "DialogCloseButton";
+
 export default DialogCloseButton;

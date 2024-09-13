@@ -21,7 +21,6 @@ const QueueTabsRowContent = ({
 //   dispatch: any;
 }) => {
   const handleDeleteUser = async () => {
-    console.log("Delete user" + queueRecord.organization);
     console.log("Delete user" + queueRecord._id);
     const payload = {
       userId: queueRecord._id

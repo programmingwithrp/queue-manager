@@ -40,15 +40,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
     callbacks: {
     async jwt({ token, user, session }) {
+      // @ts-ignore
+      const { _id, username, role, organization } = user;
       if (user) {
-        token.userId  = user._id;
-        token.username = user.username;
-        token.role = user.role;
-        token.organization = user.organization;
+        token.userId  = _id;
+        token.username = username;
+        token.role = role;
+        token.organization  = organization; 
       }
       return token;
     },
     async session({ session, token }) {
+      // @ts-ignore
       session.user = token;
       return session;
     }

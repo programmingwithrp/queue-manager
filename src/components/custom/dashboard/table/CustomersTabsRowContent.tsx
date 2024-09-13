@@ -17,17 +17,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { PersonIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import UserModel from "@/interfaces/Usermodel";
 import { useState } from "react";
 import EditForm from "../../editform/Editform";
 import { useToast } from "../../../ui/use-toast";
+import { CustomersInterface } from "@/interfaces/interface";
 
 const CustomersTabsRowContent = ({
   userRecord,
   dispatch,
   orgId
 }: {
-  userRecord: UserModel;
+  userRecord: CustomersInterface;
   dispatch: any;
   orgId: string;
 }) => {
@@ -35,7 +35,7 @@ const CustomersTabsRowContent = ({
   const { name, status, queue, deskNumber, createdDate, description } = userRecord;
   const labels = ["name", "queue", "deskNumber", "description"]; // Labels for each input
   const userEntries = [name, queue, deskNumber, description];
-  const [editUserRecord, setEditUserRecord] = useState({ ...userRecord });
+  const [editUserRecord, setEditUserRecord] = useState<CustomersInterface>(userRecord);
   const userStatus = ["inProgress", "completed", "cancelled"];
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 

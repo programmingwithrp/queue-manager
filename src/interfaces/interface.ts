@@ -8,6 +8,7 @@ interface CustomersInterface {
   deskNumber: string;
   createdDate: string;
   description: string;
+  [key: string]: any;
 }
 interface QueueInterface {
   _id: string;

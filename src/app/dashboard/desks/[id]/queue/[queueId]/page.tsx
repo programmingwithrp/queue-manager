@@ -18,18 +18,19 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useReducer } from "react";
 
 import AddCustomerForm from "@/components/custom/customers/AddCustomerForm";
-import Usermodel from "@/interfaces/Usermodel";
+
 
 import { DashboardTabsContent } from "@/components/custom/dashboard/table/DashboardTabsContent";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useOrganization } from "@/context/OrganizationContext";
+import { CustomersInterface } from "@/interfaces/interface";
 
 interface State {
   isLoading: boolean;
   openAddCustomerPanel: boolean;
   session: any;
-  users: Usermodel[];
-  displayUsers: Usermodel[];
+  users: CustomersInterface[];
+  displayUsers: CustomersInterface[];
   openQRDialog: boolean;
   orgId: string;
 }
@@ -214,7 +215,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
             />
             <DashboardTabsContent
               dispatch={dispatch}
-              users={displayUsers.filter((user: Usermodel) => user.status === "pending")}
+              users={displayUsers.filter((user: CustomersInterface) => user.status === "pending")}
               isLoading={isLoading}
               tabStatus="pending"
               orgId={orgId}
@@ -222,7 +223,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
             <DashboardTabsContent
               dispatch={dispatch}
               users={displayUsers.filter(
-                (user: Usermodel) => user.status === "inProgress"
+                (user: CustomersInterface) => user.status === "inProgress"
               )}
               isLoading={isLoading}
               tabStatus="inProgress"
@@ -231,7 +232,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
             <DashboardTabsContent
               dispatch={dispatch}
               users={displayUsers.filter(
-                (user: Usermodel) => user.status === "completed"
+                (user: CustomersInterface) => user.status === "completed"
               )}
               isLoading={isLoading}
               tabStatus="completed"
@@ -240,7 +241,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
             <DashboardTabsContent
               dispatch={dispatch}
               users={displayUsers.filter(
-                (user: Usermodel) => user.status === "cancelled"
+                (user: CustomersInterface) => user.status === "cancelled"
               )}
               isLoading={isLoading}
               tabStatus="cancelled"
