@@ -4,7 +4,6 @@ import connectToDatabase from "@/lib/databaseConnection";
 import { Customer } from "@/model/CustomerModel";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log("URI@@" + process.env.MONGODB_URI);
   await connectToDatabase();
 
   if (req.method === "GET") {
