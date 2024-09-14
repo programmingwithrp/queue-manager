@@ -31,7 +31,7 @@ const DashboardAside = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                href="/dashboard"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Home className="h-5 w-5" />
@@ -52,7 +52,7 @@ const DashboardAside = () => {
             </TooltipTrigger>
             <TooltipContent side="right">Desks</TooltipContent>
           </Tooltip>
-          <Tooltip>
+          {/* <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 href="#"
@@ -87,7 +87,7 @@ const DashboardAside = () => {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Users</TooltipContent>
-          </Tooltip>
+          </Tooltip> */}
           
           
         </TooltipProvider>

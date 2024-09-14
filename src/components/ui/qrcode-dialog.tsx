@@ -20,7 +20,7 @@ import { useToast } from "./use-toast";
 const DialogCloseButton = React.memo(
   ({ orgId, triggerElement }: { orgId: string; triggerElement: React.ReactNode }) => {
     const [imageSrc, setImageSrc] = useState<string>("");
-    const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const apiUrl = baseUrl + "/createuser/" + orgId;
     const {toast} = useToast();
     const handleCopy = async () => {

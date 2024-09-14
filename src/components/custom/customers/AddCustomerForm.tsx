@@ -26,11 +26,12 @@ import { Input } from "@/components/ui/input";
 import { randomInt } from "crypto";
 import { useToast } from "../../ui/use-toast";
 import { useOrganization } from "@/context/OrganizationContext";
-
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 const formSchema = z.object({
   email: z.string().email(),
   name: z.string().nonempty(),
-  deskNumber: z.string().nonempty(),
+  deskNumber: z.number(),
   queueId: z.string().nonempty(),
   createdDate: z.string().nonempty(),
   status: z.string().nonempty(),
@@ -40,7 +41,7 @@ const formSchema = z.object({
 
 export default function AddCustomerForm({
   dispatch,
-  queueId,
+  queueId
 }: {
   dispatch: any;
   queueId: string;
@@ -48,14 +49,36 @@ export default function AddCustomerForm({
   console.log("inside Addcustom f", queueId);
   const { toast } = useToast();
   const { session } = useOrganization();
+  const pathname = usePathname();
+  const [DeskNumberValue, setDeskNumberValue] = useState<number>(0);
+
+  const handleDeskNumber = async (deskId: string) => {
+    const response = await fetch(`/api/desks?deskId=${deskId}`);
+    const data = await response.json();
+    console.log("Desk Number :>> ", data.number);
+    setDeskNumberValue(data?.number);
+  };
+
+  // get Desk Id
+  console.log("pathname :>> ", pathname);
+  var pathSegments = pathname?.split("/");
+  // http://localhost:3000/dashboard/desks/66e32de598dfb0d0078621fa/queue/66e33174b2742a817dd12fcd
+  pathSegments?.map((segment, index) => {
+    console.log("segment :>> ", segment);
+    if (segment === "desks") {
+      pathSegments ? handleDeskNumber(pathSegments[index + 1]) : "";
+    }
+  });
+
   console.log("session :>> inside AddCustomerForm ", session);
+  console.log("DeskNumberValue :>> ", DeskNumberValue);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       name: "",
       status: "waiting",
-      deskNumber: "",
+      deskNumber: DeskNumberValue,
       queueId,
       organization: session?.user?.organization?._id || "",
       description: "",
@@ -63,10 +86,30 @@ export default function AddCustomerForm({
     }
   });
 
+  // useEffect to update the form values when DeskNumberValue or queueId changes
+  useEffect(() => {
+    form.reset({
+      ...form.getValues(), // Keep the current form values
+      deskNumber: DeskNumberValue, // Update deskNumber from the state
+      queueId: queueId, // Update queueId from the state.
+      organization: session?.user?.organization?._id || ""
+    });
+  }, [DeskNumberValue, queueId, session]); // Watch for changes to these states
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const { name, deskNumber, queueId, createdDate, status, organization, description, email } = values;
+    const {
+      name,
+      deskNumber,
+      queueId,
+      createdDate,
+      status,
+      organization,
+      description,
+      email
+    } = values;
+    console.log("values :>> ", values);
     const addUser = await fetch("/api/customers", {
       method: "POST",
       body: JSON.stringify({
@@ -144,7 +187,7 @@ export default function AddCustomerForm({
                   <FormControl>
                     <Input placeholder="Email" {...field} />
                   </FormControl>
-                  <FormDescription>This is your public display name.</FormDescription>
+                  <FormDescription>You will get notification on mail when your turn comes.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -156,7 +199,7 @@ export default function AddCustomerForm({
                 <FormItem>
                   <FormLabel>Desk</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} min={0} max={session?.user?.organization?.nextDeskNumber}/>
+                    <Input type="number" {...field} disabled />
                   </FormControl>
                   <FormDescription>Desk number</FormDescription>
                   <FormMessage />

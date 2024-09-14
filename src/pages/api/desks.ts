@@ -9,14 +9,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === "GET") {
     // Get Organization Desks
-    const { organization } = req.query;
-    try {
-      const desks = await Desk.find({
-        organization
-      });
-      res.status(200).json(desks);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch desks" });
+    const { organization, deskId } = req.query;
+    if (deskId !== undefined) {
+      const { deskId } = req.query;
+      try {
+        const desk = await Desk.findById(
+          deskId
+        );
+        res.status(200).json(desk);
+      } catch (error) {
+        res.status(500).json({ error: "Failed to fetch desk" });
+      }
+      return;
+    }
+    if (organization !== undefined) {
+      try {
+        const desks = await Desk.find({
+          organization
+        });
+        res.status(200).json(desks);
+      } catch (error) {
+        res.status(500).json({ error: "Failed to fetch desks" });
+      }
+      return;
     }
   }
   if (req.method === "POST") {
@@ -37,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await desk.save();
 
       ExistedOrg.desks.push(desk._id);
-        await ExistedOrg.save();
+      await ExistedOrg.save();
       res.status(201).json(desk);
     } catch (error) {
       res.status(500).json({ error: "Failed to create desk" + error });
