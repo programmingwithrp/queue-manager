@@ -160,9 +160,8 @@ export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: 
       });
       setUserStatusPopup(true);
       setUserStatus(data);
-      setInterval(() => {
+      setTimeout(() => {
         setUserStatusPopup(false);
-        setUserStatus({});
       }, 10000);
     } else {
       toast({
@@ -186,7 +185,7 @@ export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: 
               <div className="flex flex-row justify-between">
                 <div className="flex flex-col">
                   <span className="font-bold">Waiting Time</span>
-                  <span>{userStatus.waitingTime}</span>
+                  <span>{userStatus.waitingTime} Minutes</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="font-bold">Current Queue Number</span>

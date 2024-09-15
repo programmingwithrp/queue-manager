@@ -141,7 +141,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     var lastCustomer = await Customer.findOne({ queue: queueId }).sort({
       tokenNumber: -1
     });
-    console.log("Pre-save middleware to assign a token number");
+
     if (lastCustomer) {
       newTokenNumber = lastCustomer.tokenNumber + 1;
       console.log("lastCustomer.tokenNumber" + lastCustomer.tokenNumber);
