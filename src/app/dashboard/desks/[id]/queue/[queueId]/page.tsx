@@ -1,5 +1,5 @@
 "use client";
-import { File, ListFilter, PlusCircle } from "lucide-react";
+import { File, ListFilter, PlusCircle, RefreshCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -15,15 +15,15 @@ import {
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import AddCustomerForm from "@/components/custom/customers/AddCustomerForm";
-
 
 import { DashboardTabsContent } from "@/components/custom/dashboard/table/DashboardTabsContent";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useOrganization } from "@/context/OrganizationContext";
 import { CustomersInterface } from "@/interfaces/interface";
+import { useToast } from "@/components/ui/use-toast";
 
 interface State {
   isLoading: boolean;
@@ -100,7 +100,7 @@ function reducer(state: typeof initialState, action: any) {
 export default function QueueCustomers({ params }: { params: { queueId: string } }) {
   const { session } = useOrganization();
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  const { toast } = useToast();
   const { users, displayUsers, isLoading, openAddCustomerPanel, orgId } = state;
   const totalUsersBatch = [];
   for (let index = 0; index < users.length; index += 10) {
@@ -108,6 +108,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
       users.length > index + 10 ? `${index + 10}` : `${users.length.toString()}`
     );
   }
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     // const checkAuth = async () => {
@@ -128,7 +129,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
     //   }
     // };
     async function fetchCustomersData() {
-      const fetchAPI = await fetch("/api/customers/?queue=" + params?.queueId);
+      const fetchAPI = await fetch("/api/customers?queue=" + params?.queueId);
       const data = await fetchAPI.json();
       dispatch({ type: "FETCH_USERS", payload: data });
     }
@@ -136,13 +137,38 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
     // checkAuth();
     fetchCustomersData();
     dispatch({ type: "SET_LOADING", payload: false });
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
 
   function handleLimitUser(limit: string) {
     console.log("limit :>> ", limit);
     dispatch({ type: "SET_DISPLAY_USERS", payload: users.slice(0, Number(limit)) });
   }
 
+  const handleResetQueue = async (queueId: string) => {
+    const response = await fetch("/api/queue?action=reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        queueId: queueId
+      })
+    });
+    if (response.ok) {
+      toast({
+        title: "Queue Reset",
+        description: "Queue reset successfully"
+      });
+      setRefresh(!refresh);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Queue Reset",
+        description: "Queue reset failed"
+      });
+    }
+  };
   if (!session) {
     return <div>Loading...</div>;
   }
@@ -153,7 +179,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
         <div className="flex items-center">
           <TabsList>
             <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="pending">Pending</TabsTrigger>
+            <TabsTrigger value="waiting">waiting</TabsTrigger>
             <TabsTrigger value="inProgress">inProgress</TabsTrigger>
             <TabsTrigger value="completed" className="hidden sm:flex">
               Completed
@@ -176,7 +202,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem checked>all</DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem>pending</DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem>waiting</DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem>inProgress</DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem>completed</DropdownMenuCheckboxItem>
               </DropdownMenuContent>
@@ -184,6 +210,17 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
             <Button size="sm" variant="outline" className="h-7 gap-1">
               <File className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Export</span>
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 gap-1"
+              onClick={() => handleResetQueue(params.queueId)}
+            >
+              <RefreshCcw className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Reset Queue
+              </span>
             </Button>
             <Button
               size="sm"
@@ -203,7 +240,7 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
           </div>
         </div>
         {openAddCustomerPanel ? (
-          <AddCustomerForm dispatch={dispatch} queueId = {params.queueId} />
+          <AddCustomerForm dispatch={dispatch} queueId={params.queueId} />
         ) : (
           <>
             <DashboardTabsContent
@@ -215,9 +252,11 @@ export default function QueueCustomers({ params }: { params: { queueId: string }
             />
             <DashboardTabsContent
               dispatch={dispatch}
-              users={displayUsers.filter((user: CustomersInterface) => user.status === "pending")}
+              users={displayUsers.filter(
+                (user: CustomersInterface) => user.status === "waiting"
+              )}
               isLoading={isLoading}
-              tabStatus="pending"
+              tabStatus="waiting"
               orgId={orgId}
             />
             <DashboardTabsContent

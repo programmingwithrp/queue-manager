@@ -45,11 +45,18 @@ const formSchema = z.object({
   description: z.string().nonempty()
 });
 
+const checkTokenStatusSchema = z.object({
+  userId: z.string().nonempty()
+});
+
 export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: any }) {
   const [desks, setDesks] = useState<DeskInterface[]>([]);
   const [queue, setQueue] = useState("");
   const [deskNumber, setDeskNumber] = useState(0);
   const [formFilled, setFormFilled] = useState(false);
+  const [userStatusPopup, setUserStatusPopup] = useState(false);
+  const [userStatus, setUserStatus] = useState<any>({});
+  const {toast} = useToast();
   useEffect(() => {
     const handleFetchDesks = () => {
       const fetchData = async () => {
@@ -72,7 +79,6 @@ export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: 
     console.log("deskNumber", deskNumber);
   };
 
-  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,6 +89,13 @@ export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: 
       email: "",
       status: "waiting",
       description: ""
+    }
+  });
+
+  const checkTokenStatusForm = useForm<z.infer<typeof checkTokenStatusSchema>>({
+    resolver: zodResolver(checkTokenStatusSchema),
+    defaultValues: {
+      userId: ""
     }
   });
 
@@ -129,11 +142,100 @@ export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: 
       });
       form.reset();
       setFormFilled(true);
+      setUserStatus(data);
+    }
+  }
+
+  async function checkTokenStatus(values: z.infer<typeof checkTokenStatusSchema>) {
+    const { userId } = values;
+    const response = await fetch("/api/customers?userId=" + userId);
+    const data = await response.json();
+    console.log("data", data);
+    if (response.ok && response.status === 200) {
+      console.log("data", data);
+      toast({
+        variant: "destructive",
+        title: "Success",
+        description: "User status fetched successfully. Information will be displayed for 10 seconds"
+      });
+      setUserStatusPopup(true);
+      setUserStatus(data);
+      setInterval(() => {
+        setUserStatusPopup(false);
+        setUserStatus({});
+      }, 10000);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "UserId is invalid"
+      });
     }
   }
 
   return (
     <div className="grid h-screen place-items-center">
+      {userStatusPopup ? (
+        <Card className="w-4/5">
+          <CardHeader>
+            <CardTitle>User Status</CardTitle>
+            <CardDescription>User added successfully</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col space-y-4">
+              <div className="flex flex-row justify-between">
+                <div className="flex flex-col">
+                  <span className="font-bold">Waiting Time</span>
+                  <span>{userStatus.waitingTime}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-bold">Current Queue Number</span>
+                  <span>{userStatus.currentTokenNumber}</span>
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold">Your Number</span>
+                <span>{userStatus.yourTokenNumber}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
+
+      <Card className="w-4/5 m-3">
+        <>
+          <CardHeader>
+            <CardTitle>Check Status</CardTitle>
+            <CardDescription>User added successfully</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...checkTokenStatusForm}>
+              <form
+                onSubmit={checkTokenStatusForm.handleSubmit(checkTokenStatus)}
+                className="space-y-8"
+              >
+                <FormField
+                  control={checkTokenStatusForm.control}
+                  name="userId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>UserId</FormLabel>
+                      <FormControl>
+                        <Input placeholder="UserId" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        This is your public display UserId.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit">Check</Button>
+              </form>
+            </Form>
+          </CardContent>
+        </>
+      </Card>
       {formFilled ? (
         // Success Card popup which will be displayed after form submission
         // should be on the middle of the screen
@@ -152,9 +254,7 @@ export function ExternalAddCustomerForm({ orgranizationId }: { orgranizationId: 
         <Card className="w-4/5">
           <CardHeader>
             <CardTitle>Details</CardTitle>
-            <CardDescription>
-              Enter Your Details to get in the queue.
-            </CardDescription>
+            <CardDescription>Enter Your Details to get in the queue.</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>

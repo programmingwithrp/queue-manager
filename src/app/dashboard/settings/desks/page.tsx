@@ -71,7 +71,7 @@ export default function DesksSetting() {
   };
 
   const handleCreateQueue = async (deskId: string) => {
-    const response = await fetch("/api/queue", {
+    const response = await fetch("/api/queue?action=create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

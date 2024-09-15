@@ -27,7 +27,7 @@ import { randomInt } from "crypto";
 import { useToast } from "../../ui/use-toast";
 import { useOrganization } from "@/context/OrganizationContext";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 const formSchema = z.object({
   email: z.string().email(),
   name: z.string().nonempty(),
@@ -52,23 +52,38 @@ export default function AddCustomerForm({
   const pathname = usePathname();
   const [DeskNumberValue, setDeskNumberValue] = useState<number>(0);
 
-  const handleDeskNumber = async (deskId: string) => {
-    const response = await fetch(`/api/desks?deskId=${deskId}`);
-    const data = await response.json();
-    console.log("Desk Number :>> ", data.number);
-    setDeskNumberValue(data?.number);
-  };
+  // memoize the function to avoid multiple calls
 
-  // get Desk Id
-  console.log("pathname :>> ", pathname);
-  var pathSegments = pathname?.split("/");
-  // http://localhost:3000/dashboard/desks/66e32de598dfb0d0078621fa/queue/66e33174b2742a817dd12fcd
-  pathSegments?.map((segment, index) => {
-    console.log("segment :>> ", segment);
-    if (segment === "desks") {
-      pathSegments ? handleDeskNumber(pathSegments[index + 1]) : "";
-    }
-  });
+  // const handleDeskNumber = async (deskId: string) => {
+  //   const response = await fetch(`/api/desks?deskId=${deskId}`);
+  //   const data = await response.json();
+  //   console.log("Desk Number :>> ", data.number);
+  //   setDeskNumberValue(data?.number);
+  // };
+
+  const handleDeskNumber = useCallback(
+    async (deskId: string) => {
+      try {
+        const response = await fetch(`/api/desks?deskId=${deskId}`);
+        const data = await response.json();
+        console.log("Desk Number :>> ", data.number);
+        setDeskNumberValue(data?.number);
+      } catch (error) {
+        console.error("Error fetching desk number:", error);
+      }
+    },
+    [] // Dependencies array, add dependencies here if needed (e.g., if setDeskNumberValue changes)
+  );
+
+  useEffect(() => {
+    var pathSegments = pathname?.split("/");
+    pathSegments?.map((segment, index) => {
+      console.log("segment :>> ", segment);
+      if (segment === "desks") {
+        pathSegments ? handleDeskNumber(pathSegments[index + 1]) : "";
+      }
+    });
+  }, [pathname, handleDeskNumber]);
 
   console.log("session :>> inside AddCustomerForm ", session);
   console.log("DeskNumberValue :>> ", DeskNumberValue);
@@ -187,7 +202,9 @@ export default function AddCustomerForm({
                   <FormControl>
                     <Input placeholder="Email" {...field} />
                   </FormControl>
-                  <FormDescription>You will get notification on mail when your turn comes.</FormDescription>
+                  <FormDescription>
+                    You will get notification on mail when your turn comes.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

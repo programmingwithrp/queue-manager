@@ -32,7 +32,7 @@ const CustomersTabsRowContent = ({
   orgId: string;
 }) => {
   const { toast } = useToast();
-  const { name, status, queue, deskNumber, createdDate, description } = userRecord;
+  const { name, status, queue, deskNumber, createdDate, description, tokenNumber,userId } = userRecord;
   const labels = ["name", "queue", "deskNumber", "description"]; // Labels for each input
   const userEntries = [name, queue, deskNumber, description];
   const [editUserRecord, setEditUserRecord] = useState<CustomersInterface>(userRecord);
@@ -128,6 +128,8 @@ const CustomersTabsRowContent = ({
       <TableCell className="hidden sm:table-cell">
         <PersonIcon />
       </TableCell>
+      <TableCell className="font-medium">{tokenNumber}</TableCell>
+      <TableCell className="font-medium">{userId}</TableCell>
       <TableCell className="font-medium">{name}</TableCell>
       <TableCell>
         <Badge variant="outline">{status}</Badge>

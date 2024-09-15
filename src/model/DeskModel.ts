@@ -10,7 +10,7 @@ const DeskSchema = new mongoose.Schema({
     required: true
   },
   number: { type: Number, required: true },
-
+  averageServiceTime: { type: Number},
   queues: [{ type: mongoose.Schema.Types.ObjectId, ref: "Queue" }]
 });
 

@@ -16,7 +16,7 @@ import { DeskInterface } from "@/interfaces/interface";
 const DesksTabsRowContent = ({
   deskRecord,
   handleDeleteUser,
-  handleCreateQueue
+  handleCreateQueue,
 }: {
   deskRecord: DeskInterface;
   handleDeleteUser?: () => void;
