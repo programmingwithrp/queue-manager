@@ -61,7 +61,7 @@ const Users = () => {
     fetchOrgUsers();
   }, []);
   const { session } = useOrganization();
-  console.log("session :>> inside Users ", session);
+  console.log("session :>> inside Users ", session?.user?.role);
 
   const handleCreateUser = async (user: any) => {
     const response = await fetch("/api/organizationusers", {
@@ -118,93 +118,100 @@ const Users = () => {
 
   return (
     <Tabs defaultValue="users">
-      <EditForm
-        openStatus={isCreateFormOpen}
-        setOpenStatus={setIsCreateFormOpen}
-        cardTitle="Create User"
-        triggerButton={TriggerButton}
-        Icon={<Pencil2Icon />}
-        cardDescription="Create User"
-        cardFormContent={
-          <>
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                onChange={(e) => setEditName(e.target.value)}
-                id="name"
-                placeholder=""
-                required
-                name="name"
-                value={editName}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                onChange={(e) => setEditUsername(e.target.value)}
-                id="username"
-                placeholder=""
-                required
-                name="username"
-                value={editUsername}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="organization">Role</Label>
-              <Select name="role" required onValueChange={setEditRole}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {roles.map((role: any) => (
-                    <SelectItem value={role} key={role}>
-                      {role}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                onChange={(e) => setEditPassword(e.target.value)}
-                id="password"
-                type="password"
-                placeholder="********"
-                required
-                name="password"
-                value={editPassword}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="organization">Organization</Label>
-              <Input
-                id="organization"
-                placeholder=""
-                required
-                name="organization"
-                value={session?.user?.organization?.name}
-                disabled
-              />
-            </div>
-          </>
-        }
-        onSave={() =>
-          handleCreateUser({
-            name: editName,
-            username: editUsername,
-            role: editRole,
-            password: editPassword,
-            organization: session?.user?.organization?.name
-          })
-        }
-      />
+      {session?.user?.role === "Admin" ? (
+        <EditForm
+          openStatus={isCreateFormOpen}
+          setOpenStatus={setIsCreateFormOpen}
+          cardTitle="Create User"
+          triggerButton={TriggerButton}
+          Icon={<Pencil2Icon />}
+          cardDescription="Create User"
+          cardFormContent={
+            <>
+              <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  onChange={(e) => setEditName(e.target.value)}
+                  id="name"
+                  placeholder=""
+                  required
+                  name="name"
+                  value={editName}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  onChange={(e) => setEditUsername(e.target.value)}
+                  id="username"
+                  placeholder=""
+                  required
+                  name="username"
+                  value={editUsername}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="organization">Role</Label>
+                <Select name="role" required onValueChange={setEditRole}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roles.map((role: any) => (
+                      <SelectItem value={role} key={role}>
+                        {role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  onChange={(e) => setEditPassword(e.target.value)}
+                  id="password"
+                  type="password"
+                  placeholder="********"
+                  required
+                  name="password"
+                  value={editPassword}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="organization">Organization</Label>
+                <Input
+                  id="organization"
+                  placeholder=""
+                  required
+                  name="organization"
+                  value={session?.user?.organization?.name}
+                  disabled
+                />
+              </div>
+            </>
+          }
+          onSave={() =>
+            handleCreateUser({
+              name: editName,
+              username: editUsername,
+              role: editRole,
+              password: editPassword,
+              organization: session?.user?.organization?.name
+            })
+          }
+        />
+      ) : null}
 
       <TabsContent value="users">
         <Card x-chunk="dashboard-06-chunk-0">
           <CardHeader>
             <CardTitle>Users</CardTitle>
             <CardDescription>Manage your Organization Users.</CardDescription>
+            {session?.user?.role !== "Admin" ? 
+              <CardDescription>
+                For More Actions, Please Contact Your Admin
+              </CardDescription>
+            : null}
           </CardHeader>
           <CardContent>
             {!isLoading ? (

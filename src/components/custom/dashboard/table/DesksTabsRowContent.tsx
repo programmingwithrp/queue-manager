@@ -12,6 +12,7 @@ import {
 import { TableCell, TableRow } from "@/components/ui/table";
 import { DesktopIcon } from "@radix-ui/react-icons";
 import { DeskInterface } from "@/interfaces/interface";
+import { useOrganization } from "@/context/OrganizationContext";
 
 const DesksTabsRowContent = ({
   deskRecord,
@@ -22,7 +23,7 @@ const DesksTabsRowContent = ({
   handleDeleteUser?: () => void;
   handleCreateQueue?: () => void;
 }) => {
-
+  const { session } = useOrganization();
 
   const { number, deskDescription } = deskRecord;
   return (
@@ -46,7 +47,8 @@ const DesksTabsRowContent = ({
               <Link href={`/dashboard/desks/${deskRecord._id}`}>View Queue</Link>
             </DropdownMenuItem>
             {handleCreateQueue ? <DropdownMenuItem onClick={handleCreateQueue}>Create Queue</DropdownMenuItem>: null}
-            {handleDeleteUser ? <DropdownMenuItem onClick={handleDeleteUser}>Delete</DropdownMenuItem>: null}
+            {handleDeleteUser
+            ? <DropdownMenuItem onClick={handleDeleteUser} disabled={session?.user?.role !== "Admin"}>Delete</DropdownMenuItem>: null}
           </DropdownMenuContent>
         </DropdownMenu>
       </TableCell>

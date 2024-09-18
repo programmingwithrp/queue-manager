@@ -122,45 +122,47 @@ export default function DesksSetting() {
 
   return (
     <Tabs defaultValue="desks">
-      <EditForm
-        openStatus={isCreateFormOpen}
-        setOpenStatus={setIsCreateFormOpen}
-        cardTitle="Create Desk"
-        triggerButton={TriggerButton}
-        Icon={<Pencil2Icon />}
-        cardDescription="Create Desk"
-        cardFormContent={
-          <>
-            {["organization", "description"].map((entry, index) => (
-              <div key={entry} className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor={`entry-${entry}`} className="text-right">
-                  {entry}
-                </label>
-                <input
-                  id={`entry-${index}`}
-                  value={
-                    entry === "organization"
-                      ? session?.user?.organization?.name
-                      : description
-                  }
-                  className="col-span-3 ml-2 border-spacing-2 border-black pl-2"
-                  onChange={(e) => {
-                    console.log("e :>> " + e.target.value);
-                    setDescription(e.target.value);
-                  }}
-                  disabled={entry === "organization"}
-                />
-              </div>
-            ))}
-          </>
-        }
-        onSave={() =>
-          handleCreateDesk({
-            organization: session?.user?.organization?.name,
-            description
-          })
-        }
-      />
+      {session?.user?.role === "Admin" ? (
+        <EditForm
+          openStatus={isCreateFormOpen}
+          setOpenStatus={setIsCreateFormOpen}
+          cardTitle="Create Desk"
+          triggerButton={TriggerButton}
+          Icon={<Pencil2Icon />}
+          cardDescription="Create Desk"
+          cardFormContent={
+            <>
+              {["organization", "description"].map((entry, index) => (
+                <div key={entry} className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor={`entry-${entry}`} className="text-right">
+                    {entry}
+                  </label>
+                  <input
+                    id={`entry-${index}`}
+                    value={
+                      entry === "organization"
+                        ? session?.user?.organization?.name
+                        : description
+                    }
+                    className="col-span-3 ml-2 border-spacing-2 border-black pl-2"
+                    onChange={(e) => {
+                      console.log("e :>> " + e.target.value);
+                      setDescription(e.target.value);
+                    }}
+                    disabled={entry === "organization"}
+                  />
+                </div>
+              ))}
+            </>
+          }
+          onSave={() =>
+            handleCreateDesk({
+              organization: session?.user?.organization?.name,
+              description
+            })
+          }
+        />
+      ) : null}
       <TabsContent value="desks">
         {/* {TriggerButton} */}
         <Card x-chunk="dashboard-06-chunk-0">
@@ -169,6 +171,11 @@ export default function DesksSetting() {
             <CardDescription>
               Manage your Desks and view their current queue and customers.
             </CardDescription>
+            {session?.user?.role !== "Admin" ? 
+              <CardDescription>
+                For More Actions, Please Contact Your Admin
+              </CardDescription>
+            : null}
           </CardHeader>
           <CardContent>
             {!isLoading ? (

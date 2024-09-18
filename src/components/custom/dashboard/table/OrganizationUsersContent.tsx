@@ -24,7 +24,7 @@ const OrganizationUserTabsRowContent = ({
   handleCreateUser?: () => void;
 }) => {
   const { _id, username, role } = organizationUserRecord;
-  const {session} = useOrganization();
+  const { session } = useOrganization();
   return (
     <TableRow>
       <TableCell className="hidden sm:table-cell">
@@ -43,17 +43,21 @@ const OrganizationUserTabsRowContent = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
+            <DropdownMenuItem disabled>
               <Link href={`/dashboard/users/${organizationUserRecord._id}`}>
-                View Activity
+                View Activity (Coming Soon)
               </Link>
             </DropdownMenuItem>
-            {handleCreateUser && session?.user?.role === "admin"
-            ? (
-              <DropdownMenuItem onClick={handleCreateUser}>Create User</DropdownMenuItem>
+            <DropdownMenuItem disabled>
+              <Link href={`/dashboard/users/${organizationUserRecord._id}`}>
+                Manage Access (Coming Soon)
+              </Link>
+            </DropdownMenuItem>
+            {handleCreateUser ? (
+              <DropdownMenuItem onClick={handleCreateUser} disabled={session?.user?.role !== "Admin"}>Create User</DropdownMenuItem>
             ) : null}
             {handleDeleteUser ? (
-              <DropdownMenuItem onClick={handleDeleteUser}>Delete</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDeleteUser} disabled={session?.user?.role !== "Admin"}>Delete</DropdownMenuItem>
             ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
