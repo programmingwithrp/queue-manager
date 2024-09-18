@@ -16,7 +16,7 @@ const OrgUserSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ["Admin", "Staff", "Customer"]
+    enum: ["Admin", "User"]
   },
   organization: {
     type: mongoose.Schema.Types.ObjectId,

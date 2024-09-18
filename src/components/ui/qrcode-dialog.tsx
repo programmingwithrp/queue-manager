@@ -16,12 +16,24 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import React from "react";
 import { useToast } from "./use-toast";
+import { usePathname } from "next/navigation";
 
 const DialogCloseButton = React.memo(
   ({ orgId, triggerElement }: { orgId: string; triggerElement: React.ReactNode }) => {
     const [imageSrc, setImageSrc] = useState<string>("");
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const apiUrl = baseUrl + "/createuser/" + orgId;
+    const pathname = usePathname();
+    console.log("pathname" + pathname);
+    const [baseUrl, setBaseUrl] = useState<string>("");
+    console.log("baseUrl from PathName" + baseUrl);
+    useEffect(() => {
+      // Fetch base URL dynamically on client side
+      if (typeof window !== "undefined") {
+        setBaseUrl(window.location.origin); // e.g., https://your-domain.com
+      }
+    }, []);
+
+    const apiUrl = `${baseUrl}/createuser/${orgId}`;
+
     const {toast} = useToast();
     const handleCopy = async () => {
       try {
@@ -34,7 +46,7 @@ const DialogCloseButton = React.memo(
         console.error("Failed to copy to clipboard", e);
       }
     };
-    console.log("baseUrl" + baseUrl);
+    console.log("baseUrl 2" + baseUrl);
     console.log("apiUrl" + apiUrl);
     useEffect(() => {
       async function fetchQrCodeImage(orgId: string) {

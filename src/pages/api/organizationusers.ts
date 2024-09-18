@@ -43,6 +43,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(500).json({ error: "Failed to create organization user" + error });
     }
   }
+  if (req.method === "DELETE") {
+    const { id } = req.query;
+    try {
+      const deletedUser = await OrganizationUser.deleteOne({ _id: id });
+      res.status(200).json(deletedUser);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete organization user" + error });
+    }
+  }
 }
 
 export async function verifyOrganizationUser(username: string, password: string) {

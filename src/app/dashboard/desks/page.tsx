@@ -74,7 +74,6 @@ const Desks = () => {
               <LoadingWheel />
             )}
           </CardContent>
-          <CardFooter>hey footer</CardFooter>
         </Card>
       </TabsContent>
     </Tabs>
