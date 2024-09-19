@@ -30,6 +30,9 @@ interface OrgUserInterface {
   username: string;
   role: string;
   organization: string;
+  name: string;
+  [key: string]: any;
+
 }
 
 interface OrganizationInterface {

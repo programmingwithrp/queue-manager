@@ -43,6 +43,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(500).json({ error: "Failed to create organization user" + error });
     }
   }
+  if(req.method === "PUT") {
+    const { _id, name, username, role } = req.body;
+    try {
+      const updatedUser = await OrganizationUser.updateOne(
+        { _id },
+        {
+          name,
+          username,
+          role,
+        }
+      );
+      res.status(200).json(updatedUser);
+    }
+    catch (error) {
+      res.status(500).json({ error: "Failed to update organization user" + error });
+    }
+  }
   if (req.method === "DELETE") {
     const { id } = req.query;
     try {

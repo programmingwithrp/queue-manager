@@ -116,6 +116,14 @@ const Users = () => {
     }
   };
 
+  const handleUpdateUserOnUi = (updatedUser: OrgUserInterface) => {
+    setUsers(
+      users.map((user: OrgUserInterface) =>
+        user._id === updatedUser._id ? updatedUser : user
+      )
+    );
+  }
+
   return (
     <Tabs defaultValue="users">
       {session?.user?.role === "Admin" ? (
@@ -223,13 +231,14 @@ const Users = () => {
                     </TableHead>
                     <TableHead>Id</TableHead>
                     <TableHead>UserName</TableHead>
+                    <TableHead>Name</TableHead>
                     <TableHead>
                       <div className="grid gap-2">
                         <Label htmlFor="organization">Role</Label>
                       </div>
                     </TableHead>
                     <TableHead>
-                      <span className="sr-only">Actions</span>
+                    <span className="sr-only">Actions</span>
                     </TableHead>
                   </>
                 }
@@ -239,6 +248,7 @@ const Users = () => {
                     key={user._id}
                     organizationUserRecord={user}
                     handleDeleteUser={() => handleDeleteUser(user._id)}
+                    updateUserOnUi={handleUpdateUserOnUi}
                   />
                 ))}
               </CustomTable>
