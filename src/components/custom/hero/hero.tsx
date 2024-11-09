@@ -1,5 +1,6 @@
 import { MoveRight, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const HomePage = () => (
   <div className="w-full">
@@ -15,18 +16,15 @@ const HomePage = () => (
             This is the start of something new
           </h1>
           <p className="text-lg md:text-xl leading-relaxed tracking-tight text-muted-foreground max-w-2xl text-center">
-            Managing a small business today is already tough. Avoid further
-            complications by ditching outdated, tedious trade methods. Our goal
-            is to streamline SMB trade, making it easier and faster than ever.
+            Register Your Organization and start managing your queue today
           </p>
         </div>
         <div className="flex flex-row gap-3">
-          <Button size="lg" className="gap-4" variant="outline">
-            Jump on a call <PhoneCall className="w-4 h-4" />
-          </Button>
-          <Button size="lg" className="gap-4">
-            Sign up here <MoveRight className="w-4 h-4" />
-          </Button>
+          <Link href="/signup">
+            <Button size="lg" className="gap-4">
+              Sign up here <MoveRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

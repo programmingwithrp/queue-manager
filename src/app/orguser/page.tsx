@@ -67,7 +67,7 @@ export default function SignUpOrgUserForm() {
       <Card className="mx-auto max-w-sm mt-4">
         <CardHeader>
           <CardTitle className="text-xl">Organization SignUp</CardTitle>
-          <CardDescription>Create Organization Account</CardDescription>
+          <CardDescription>Now create your organization-user to manage your dashboard</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreateOrgUser}>

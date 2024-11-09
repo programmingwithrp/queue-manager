@@ -49,9 +49,9 @@ export default function SignUpForm() {
   return (
     <div className="flex items-center justify-center h-screen">
       <Card className="mx-auto max-w-sm mt-4">
-        <CardHeader>
-          <CardTitle className="text-xl">Organization SignUp</CardTitle>
-          <CardDescription>Create Organization Account</CardDescription>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl ">Organization SignUp</CardTitle>
+          <CardDescription>Register Your Organization To Manage Queue with Flexiqueue</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleCreateOrg}>
@@ -65,7 +65,7 @@ export default function SignUpForm() {
                   <Label htmlFor="Organization-Type">Organization Type</Label>
                   <Input
                     id="Organization-Type"
-                    placeholder="Robinson"
+                    placeholder="Hospital"
                     required
                     name="organizationType"
                   />

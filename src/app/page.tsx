@@ -24,29 +24,25 @@ const Header1 = () => {
     },
     {
       title: "Product",
-      description: "Managing a small business today is already tough.",
+      description: "Managing a queue with FlexiQueue is easy.",
       items: [
         {
-          title: "Reports",
-          href: "/reports"
+          title: "Desks",
+          href: "/dashboard/desks"
         },
         {
-          title: "Statistics",
-          href: "/statistics"
+          title: "Queue",
+          href: "/dashboard/queues"
         },
         {
           title: "Dashboards",
-          href: "/dashboards"
-        },
-        {
-          title: "Recordings",
-          href: "/recordings"
+          href: "/dashboard"
         }
       ]
     },
     {
       title: "Company",
-      description: "Managing a small business today is already tough.",
+      description: "Feeling curious? Learn more about us.",
       items: [
         {
           title: "About us",
@@ -98,9 +94,6 @@ const Header1 = () => {
                                   {item.description}
                                 </p>
                               </div>
-                              <Button size="sm" className="mt-10">
-                                Book a call today
-                              </Button>
                             </div>
                             <div className="flex flex-col text-sm h-full justify-end">
                               {item.items?.map((subItem) => (
@@ -124,12 +117,9 @@ const Header1 = () => {
             </NavigationMenu>
           </div>
           <div className="flex lg:justify-center">
-            <p className="font-semibold">TWBlocks</p>
+            <p className="font-semibold">FlexiQueue</p>
           </div>
           <div className="flex justify-end w-full gap-4">
-            <Button variant="ghost" className="hidden md:inline">
-              Book a demo
-            </Button>
             <div className="border-r hidden md:inline"></div>
             <Link href="/signup">
               {" "}
@@ -177,7 +167,7 @@ const Header1 = () => {
         </div>
       </header>
       <HomePage />
-      <TestimonialsPage />
+      {/* <TestimonialsPage /> */}
     </>
   );
 };

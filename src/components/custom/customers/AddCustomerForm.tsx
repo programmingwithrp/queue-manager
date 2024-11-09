@@ -173,7 +173,7 @@ export default function AddCustomerForm({
       <CardHeader>
         <CardTitle>Product Details</CardTitle>
         <CardDescription>
-          Lipsum dolor sit amet, consectetur adipiscing elit
+          Add your customers to the queue. You can add multiple customers to the queue. and they will be served in the order of token number.
         </CardDescription>
       </CardHeader>
       <CardContent>

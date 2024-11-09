@@ -14,8 +14,8 @@ const DashboardLayout = async ({
   const session = await auth();
   console.log("session from dashboard Layout" + JSON.stringify(session));
   if (!session) {
-    return <div>
-      <h2>Opps, Session not found &nbsp</h2><Button className="p-1 "><Link href={"/signin"}>Login Again</Link></Button>
+    return <div className="m-5 align-middle">
+      <h2>Opps, Looks like you logged out.</h2><Button className="p-1 "><Link href={"/signin"}>Login Again</Link></Button>
     </div>;
   }
   return (
